@@ -1,0 +1,88 @@
+.daysComponent {
+  width: 100%;
+  border-radius: 1rem;
+  transition: all 0.3s ease-in;
+  cursor: pointer;
+}
+
+.daysComponent:hover {
+  box-shadow: var(--box-shadow);
+}
+
+.daysComponent_box_img_img {
+  border-radius: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+.daysComponent_box_profile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.daysComponent_box_img_1 {
+  border-bottom-left-radius: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+.daysComponent_box_img_2 {
+  width: 100%;
+  height: auto;
+}
+
+.daysComponent_box_img_3 {
+  border-bottom-right-radius: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+.daysComponent_box_title {
+  padding: 1rem;
+  line-height: normal;
+}
+
+.daysComponent_box_title h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.daysComponent_box_title_info_profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.daysComponent_box_title_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.daysComponent_box_title_info_profile_img {
+  border-radius: 50%;
+}
+
+.daysComponent_box_title_info_profile p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.daysComponent_box_title_info_profile span {
+  font-weight: 600;
+  padding-inline: 0.5rem;
+  color: #000;
+}
+
+.daysComponent_box_title_info_price small {
+  font-weight: 600;
+  border: 2px solid var(--icons-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
