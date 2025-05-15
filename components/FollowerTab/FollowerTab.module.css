@@ -4,6 +4,7 @@
   border: 1px;
   position: relative;
   padding-bottom: 13rem;
+  box-sizing: border-box;
 }
 
 .followerTab_title {
@@ -51,7 +52,8 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 1rem;
+  box-sizing: border-box;
 }
 
 .followerTab_member_box {

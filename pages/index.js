@@ -2,7 +2,19 @@ import React from "react";
 
 // INTERNAL IMPORT
 import Style from '../styles/index.module.css'
-import { BigNFTSlider, Category, Filter, HeroSection, Service, Subscribe, Title, NFTCard, Collection, FollowerTab } from "@/components/componentsindex";
+import {
+  BigNFTSlider,
+  Category,
+  Filter,
+  HeroSection,
+  Service,
+  Subscribe,
+  Title,
+  NFTCard,
+  Collection,
+  FollowerTab,
+  AudioLive
+} from "@/components/componentsindex";
 
 const Home = () => {
   return (
@@ -10,6 +22,11 @@ const Home = () => {
       <HeroSection />
       <Service />
       <BigNFTSlider />
+      <Title
+        heading='Audio Collections'
+        paragraph='Discover the most outstanding NFTs in all topics of life'
+      />
+      <AudioLive />
       <Title
         heading='New Collection'
         paragraph='Discover the most outstanding NFTs in all topics of life'

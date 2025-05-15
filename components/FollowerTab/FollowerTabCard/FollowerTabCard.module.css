@@ -1,11 +1,14 @@
 .followerTabCard_box {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   background-color: var(--main-bg-color);
   border-radius: 2rem;
   transition: all 0.2s ease-in;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
 .followerTabCard_box:hover {
@@ -32,25 +35,30 @@
 }
 
 .followerTabCard_box_img {
-  grid-column: 1/-1;
+  width: 100%;
 }
 
 .followerTabCard_box_img_img {
-  border-radius: 2rem;
+  border-radius: 2rem 2rem 0 0;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .followerTabCard_box_profile {
-  grid-column: 1/-1;
+  width: 100%;
   text-align: center;
-  margin-top: -2rem;
+  margin-top: -3.5rem;
   position: relative;
+  z-index: 1;
 }
 
 .followerTabCard_box_profile_img {
   position: relative;
   border-radius: 50%;
-  padding: 1rem;
   z-index: 22222;
+  background-color: var(--main-bg-color);
+  border: 3px solid var(--main-bg-color);
 }
 
 .followerTabCard_box_profile::before {
@@ -60,12 +68,14 @@
   height: 5rem;
   background-color: var(--main-bg-color);
   border-radius: 50%;
-  top: -20%;
-  left: 38%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
 }
 
 .followerTabCard_box_info {
-  grid-column: 1/-1;
+  width: 100%;
   display: flex;
   align-items: center;
   line-height: 0;
