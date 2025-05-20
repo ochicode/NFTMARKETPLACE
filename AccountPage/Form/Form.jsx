@@ -77,7 +77,7 @@ const Form = () => {
                 <div className={Style.Form_box_input_box_icon}>
                   <TiSocialTwitter />
                 </div>
-                <input type="text" placeholder="https://facebook.com" />
+                <input type="text" placeholder="https://twitter.com" />
               </div>
             </div>
 
@@ -87,7 +87,7 @@ const Form = () => {
                 <div className={Style.Form_box_input_box_icon}>
                   <TiSocialInstagram />
                 </div>
-                <input type="text" placeholder="https://facebook.com" />
+                <input type="text" placeholder="https://instagram.com" />
               </div>
             </div>
           </div>

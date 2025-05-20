@@ -43,8 +43,10 @@ import musiceWave from "./musicwave.png";
 import update from "./update.png";
 import earn from "./eran.png";
 import NftVideo from "./nftvideo.png";
+import upload from "./upload.png";
 
 export default {
+  upload,
   NftVideo,
   earn,
   collection,
