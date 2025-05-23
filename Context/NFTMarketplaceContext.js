@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import Router from "next/router";
 import axios from "axios";
-import { create as ipfsHttpClient } from "ipfs-http-client";
+import { Router } from "next/router";
 
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+// Pinata configuration
+const PINATA_API_KEY = "c82259af6d22dfae2fd0";
+const PINATA_SECRET_API_KEY =
+  "3d05dcf66800211417aba4934992e8a482c9f272fda0865d9ec35c451c78bd48";
+const PINATA_JWT =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI4MjJlYWU3ZC1jODdkLTRlMWYtYTUxNy05MzUzNTA0NTQwNmUiLCJlbWFpbCI6ImJlbmFyZDUxOEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiYzgyMjU5YWY2ZDIyZGZhZTJmZDAiLCJzY29wZWRLZXlTZWNyZXQiOiIzZDA1ZGNmNjY4MDAyMTE0MTdhYmE0OTM0OTkyZThhNDgyYzlmMjcyZmRhMDg2NWQ5ZWMzNWM0NTFjNzhiZDQ4IiwiZXhwIjoxNzc5NTQ2NDkyfQ.DYYQYSzzaFMPEPzWtLQmlg9wYokY3dFPc4jnq-BOH_U";
 
 // INTERNAL IMPORT
 import { NFTMarketplaceAddress, NFTMarketplaceABI } from "./constants";
@@ -43,6 +47,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   // USESTATE
   const [currentAccount, setCurrentAccount] = useState("");
+  const router = Router;
 
   // CHECK IF WALLET IS CONNECTED
   const checkIfWalletConnected = async () => {
@@ -73,35 +78,68 @@ export const NFTMarketplaceProvider = ({ children }) => {
       });
 
       setCurrentAccount(accounts[0]);
-      window.location.reload();
     } catch (error) {
       console.log("Error while connecting to wallet", error);
     }
   };
 
-  // UPLOAD TO IPFS FUNCTION
+  // UPLOAD TO PINATA IPFS FUNCTION
   const uploadToIPFS = async (file) => {
     try {
-      const added = await client.add({ content: file });
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const metadata = JSON.stringify({
+        name: file.name,
+      });
+      formData.append("pinataMetadata", metadata);
+
+      const options = JSON.stringify({
+        cidVersion: 0,
+      });
+      formData.append("pinataOptions", options);
+
+      const res = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        formData,
+        {
+          maxBodyLength: "Infinity",
+          headers: {
+            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+            Authorization: `Bearer ${PINATA_JWT}`,
+          },
+        }
+      );
+
+      const url = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
       return url;
     } catch (error) {
-      console.log("Error uploading to IPFS", error);
+      console.log("Error uploading to Pinata IPFS", error);
     }
   };
 
   // CREATE NFT FUNCTION
-  const createNFT = async (formInput, fileUrl, router) => {
-    const { name, description, price } = formInput;
-    if (!name || !description || !price) return console.log("Data is Missing");
+  const createNFT = async (name, price, image, description, router) => {
+    if (!name || !description || !price || !image)
+      return console.log("Data is Missing");
 
-    const data = JSON.stringify({ name, description, image: fileUrl });
+    const data = JSON.stringify({ name, description, image });
 
     try {
-      const added = await client.add(data);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const res = await axios.post(
+        "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${PINATA_JWT}`,
+          },
+        }
+      );
+      const url = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
 
       await createSale(url, price);
+      router.push("/searchPage");
     } catch (error) {
       console.log("Error while creating NFT", error);
     }
@@ -110,7 +148,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   // CREATE SALE FUNCTION
   const createSale = async (url, formInputPrice, isReselling, id) => {
     try {
-      const price = ethers.utils.parseUnits(formInputPrice, "ether");
+      const price = ethers.parseUnits(formInputPrice, "ether");
       const contract = await connectingWithSmartContract();
 
       const listingPrice = await contract.getListingPrice();
@@ -124,6 +162,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
           });
 
       await transaction.wait();
+
+      console.log(transaction);
     } catch (error) {
       console.log("Error while creating sale", error);
     }
@@ -132,11 +172,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
   // FETCH NFTS FUNCTION
   const fetchNFTs = async () => {
     try {
-      const provider = new ethers.providers.JsonRpcProvider();
+      const provider = new ethers.JsonRpcProvider();
       const contract = fetchContract(provider);
 
       const data = await contract.fetchMarketItem();
-      // console.log(data);
+      console.log("nft data", data);
 
       const items = await Promise.all(
         data.map(
@@ -146,14 +186,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
             const {
               data: { image, name, description },
             } = await axios.get(tokenURI);
-            const price = ethers.utils.formatUnits(
+            const price = ethers.formatUnits(
               unformattedPrice.toString(),
               "ether"
             );
-
             return {
               price,
-              tokenId: tokenId.toNumber(),
+              tokenId: Number(tokenId),
               seller,
               owner,
               image,
@@ -169,6 +208,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
       console.log("Error while fetching NFTs", error);
     }
   };
+
+  useEffect(() => {
+    fetchNFTs();
+  }, []);
 
   // FETCH MY NFT OR LISTED NFTs
   const fetchMyNFTsOrListedNFTs = async (type) => {
@@ -235,7 +278,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         createNFT,
         fetchNFTs,
         fetchMyNFTsOrListedNFTs,
-        fetchMyNFTsOrListedNFTs,
+        buyNFT,
         checkIfWalletConnected,
         currentAccount,
         titleData,
