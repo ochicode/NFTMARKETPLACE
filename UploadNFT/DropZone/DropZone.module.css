@@ -18,7 +18,7 @@
 .Dropzone_box_input_img_img {
   border-radius: 1rem;
   padding: 1rem;
-  /* filter: invert(1); */
+  filter: invert(1);
 }
 
 .Dropzone_box_aside {
