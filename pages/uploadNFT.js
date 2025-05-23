@@ -1,7 +1,7 @@
 import React from "react";
 
 // INTERNAL IMPORT
-import Style from "../styles/upload-nft.module.css";
+import Style from "../styles/uploadNFT.module.css";
 import { DropZone, UploadNFT } from "../UploadNFT/uploadNFTIndex";
 
 const uploadNFT = () => {
