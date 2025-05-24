@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 // IMPORT ICON
 import { MdNotifications } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
+import { DiJqueryLogo } from "react-icons/di";
 
 // INTERNAL IMPORT
 import Style from "./NavBar.module.css";
@@ -22,6 +25,8 @@ const NavBar = () => {
   const [notification, setnotification] = useState(false);
   const [profile, setprofile] = useState(false);
   const [openSideMenu, setOpenSideMenu] = useState(false);
+
+  const router = useRouter();
 
   const openMenu = (e) => {
     const btnText = e.target.innerText;
@@ -81,12 +86,7 @@ const NavBar = () => {
       <div className={Style.navbar_container}>
         <div className={Style.navbar_container_left}>
           <div className={Style.logo}>
-            <Image
-              src={images.logo}
-              alt="NFT MARKET PLACE"
-              width={100}
-              height={100}
-            />
+            <DiJqueryLogo onClick={() => router.push("/")} />
           </div>
           <div className={Style.navbar_container_left_box_input}>
             <div className={Style.navbar_container_left_box_input_box}>
@@ -132,9 +132,10 @@ const NavBar = () => {
             {currentAccount == "" ? (
               <Button btnName="Connect" handleClick={() => connectWallet()} />
             ) : (
-              <Link href={{ pathname: "/uploadNFT" }}>
-                <Button btnName="Create" handleClick={() => {}} />
-              </Link>
+              <Button
+                btnName="Create"
+                handleClick={() => router.push("/uploadNFT")}
+              />
             )}
           </div>
 
