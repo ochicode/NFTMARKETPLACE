@@ -10,7 +10,7 @@ import Style from "./FollowerTab.module.css";
 import FollowerTabCard from "./FollowerTabCard/FollowerTabCard";
 import images from "../../img";
 
-const FollowerTab = () => {
+const FollowerTab = ({ TopCreator }) => {
   const CardArray = [
     {
       background: images.creatorbackground1,
@@ -164,7 +164,7 @@ const FollowerTab = () => {
 
       {popular && (
         <div className={Style.followerTab_box}>
-          {CardArray.map((el, i) => (
+          {TopCreator.map((el, i) => (
             <FollowerTabCard key={i + 1} i={i} el={el} />
           ))}
         </div>

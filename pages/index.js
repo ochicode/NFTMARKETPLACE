@@ -18,6 +18,7 @@ import {
   Brand,
   Video,
 } from "../components/componentsindex";
+import { getTopCreators } from "../TopCreators/TopCreators";
 
 // IMPORTING CONTRACT DATA
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
@@ -32,6 +33,9 @@ const Home = () => {
 
   const [nfts, setNfts] = useState([]);
   const [nftsCopy, setNftsCopy] = useState([]);
+
+  // GET TOP CREATORS
+  const creators = getTopCreators(nfts);
 
   useEffect(() => {
     fetchNFTs().then((item) => {
@@ -50,7 +54,7 @@ const Home = () => {
         paragraph="Discover the most outstanding NFTs in all topics of life"
       />
       <AudioLive />
-      <FollowerTab />
+      <FollowerTab TopCreator={creators} />
       <Slider />
       <Collection />
       <Title
