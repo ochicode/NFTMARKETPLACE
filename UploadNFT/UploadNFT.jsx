@@ -205,6 +205,9 @@ const UploadNFT = ({ createNFT, uploadToIPFS }) => {
               </div>
               <input
                 type="number"
+                min={
+                  0.00000000000000000000000000000000000000000000000000000000000001
+                }
                 placeholder="Price"
                 onChange={(e) => setPrice(e.target.value)}
               />
