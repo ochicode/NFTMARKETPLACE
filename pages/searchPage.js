@@ -17,9 +17,10 @@ const searchPage = () => {
 
   useEffect(() => {
     fetchNFTs().then((item) => {
+      console.log(fetchNFTs());
+
       setNfts(item.reverse());
       setNftsCopy(item);
-      console.log("nfts", nfts);
     });
   }, []);
 

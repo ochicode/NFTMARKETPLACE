@@ -8,7 +8,7 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import Style from "./NFTDetailsImg.module.css";
 import images from "../../img";
 
-const NFTDetailsImg = () => {
+const NFTDetailsImg = ({ nft }) => {
   const [description, setDescription] = useState(true);
   const [details, setDetails] = useState(true);
   const [like, setLike] = useState(false);
@@ -59,7 +59,7 @@ const NFTDetailsImg = () => {
 
           <div className={Style.NFTDetailsImg_box_NFT_img}>
             <Image
-              src={images.nft_image_1}
+              src={nft.image}
               alt="NFT image"
               width={700}
               height={800}
@@ -79,11 +79,7 @@ const NFTDetailsImg = () => {
 
         {description && (
           <div className={Style.NFTDetailsImg_box_description_box}>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              quos.Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Quisquam, quos.
-            </p>
+            <p>{nft.description} </p>
           </div>
         )}
 
@@ -101,11 +97,11 @@ const NFTDetailsImg = () => {
             <p>
               <small>Contract Address</small>
               <br></br>
-              0x867342HGVUC8784R365
+              {nft.seller}
             </p>
             <p>
-              <small>Token ID</small>
-              10000343565765
+              <small>Token ID:</small>
+              &nbsp; {nft.tokenId}
             </p>
           </div>
         )}
